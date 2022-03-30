@@ -1,6 +1,10 @@
+import time
+
 from steamPyp import SteamPyp
 
 if __name__ == "__main__":
+    start_time = time.time()
+
     # Get the steam key
     steam_key_file = open("steam.key", "r")
     steam_key = steam_key_file.read().replace("\n", "")
@@ -10,11 +14,31 @@ if __name__ == "__main__":
     steam = SteamPyp(key=steam_key, return_format="json")
 
     # Print CS:GO server status
-    print(steam.get_game_servers_status().json())
+    print(steam.game_servers_status().json())
 
     # Print the most recent CS:GO news
-    r = steam.get_news_from_app(appid=730, count=1)
-    print(r)
+    news = steam.news_from_app(appid=730, count=1, raw=True).json()
+    print(news)
 
+    # Print player summary of 76561198342056792
+    summary = steam.player_summary(steam_ids=['76561198342056792'])
+    print(summary)
 
+    # Print friends of 76561198342056792
+    friends = steam.player_friends(steam_id=['76561198342056792'], relationship="all")
+    print(friends)
 
+    achievements = steam.player_achievements(steam_id="76561198342056792", appid="730")
+    print(achievements)
+
+    stats = steam.player_stats(steam_id="76561198342056792", appid="730")
+    print(stats)
+
+    games = steam.player_games(steam_id="76561198342056792")
+    print(games)
+
+    recents = steam.player_recent_games(steam_id="76561198342056792")
+    print(recents)
+
+    # Print time spent
+    print(f"Time spent: {time.time() - start_time}")

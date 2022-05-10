@@ -11,9 +11,7 @@ import json
 
 
 class SteamPyp:
-    """
-    The API Class
-    """
+    """The API Class"""
 
     def __init__(self, key=None, return_format="json"):
         """
@@ -30,7 +28,7 @@ class SteamPyp:
         f.close()
 
     def set_key(self, key: str):
-        """ Authenticate with the API"""
+        """Authenticate with the API"""
         self.key = key
 
     def set_format(self, return_format: str = "json"):
@@ -43,7 +41,7 @@ class SteamPyp:
         :param game_mode: competitive or casual game mode
         :return: API Response
         """
-        r = requests.get(url=f"https://api.steampowered.com/ICSGOServers_730/GetGameServersStatus/v1/",
+        r = requests.get(url="https://api.steampowered.com/ICSGOServers_730/GetGameServersStatus/v1/",
                          headers=self.header, params={"key": self.key, "interval": interval,
                                                       "gamemode": game_mode})
         return r
@@ -73,7 +71,7 @@ class SteamPyp:
         :return: returns news from the given appid
         """
         r = requests.get(
-            f'https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/',
+            'https://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/',
             headers=self.header,
             params={"key": self.key, "maxlength": max_length, "count": count,
                     "appid": appid, "format": response_format, "enddate": end_date, "feeds": feeds, "tags": tags})
@@ -92,7 +90,7 @@ class SteamPyp:
                                          })
                 return json.dumps(new_response, indent=4)
             else:
-                raise Exception(f"")
+                raise Exception(f"Status code {r.status_code}")
 
     def player_ban(self, steam_id):
         """

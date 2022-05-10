@@ -28,7 +28,7 @@ if __name__ == "__main__":
     friends = steam.player_friends(steam_id=['76561198342056792'], relationship="all")
     print(friends)
 
-    achievements = steam.player_achievements(steam_id="76561198342056792", appid="730")
+    achievements = steam.player_achievements(steam_id="76561198342056792", appid="730", language="es")
     print(achievements)
 
     stats = steam.player_stats(steam_id="76561198342056792", appid="730")

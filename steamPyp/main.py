@@ -1,3 +1,4 @@
+import os
 import requests
 import time
 import json
@@ -23,6 +24,10 @@ class SteamPyp:
         self.key = key
         self.url = "https://api.steampowered.com"
         self.header = {'Accept': 'application/json'}
+
+        f = open(os.getcwd() + '/steamPyp/languages.json', 'r+')
+        self.languages = json.load(f)
+        f.close()
 
     def set_key(self, key: str):
         """ Authenticate with the API"""
@@ -139,7 +144,7 @@ class SteamPyp:
         data = r.json()
         return data
 
-    def player_recent_games(self, steam_id, count = None, return_format = "json"):
+    def player_recent_games(self, steam_id, count=None, return_format="json"):
         r = requests.get("https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001",
                          params={'key': self.key, "steamid": steam_id, "count": count, "format": return_format})
         data = r.json()

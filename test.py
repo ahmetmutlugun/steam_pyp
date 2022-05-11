@@ -1,6 +1,7 @@
 import time
 
 from steamPyp import SteamPyp
+from steamPyp.user import User
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -40,5 +41,7 @@ if __name__ == "__main__":
     recents = steam.player_recent_games(steam_id="76561198342056792")
     print(recents)
 
+    user = User("76561198342056792", steam)
+    print(user.set_user_data("76561198342056792", 730))
     # Print time spent
     print(f"Time spent: {time.time() - start_time}")

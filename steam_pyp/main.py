@@ -12,7 +12,7 @@ from requests import HTTPError
 # Make commands more readable, maybe higher level
 
 
-class SteamPyp:
+class Steam:
     """The API Class"""
 
     def __init__(self, key=None, return_format="json"):
@@ -25,7 +25,7 @@ class SteamPyp:
         self.url = "https://api.steampowered.com"
         self.header = {'Accept': 'application/json'}
 
-        f = open(os.getcwd() + '/steamPyp/languages.json', 'r+')
+        f = open(os.getcwd() + '/steam_pyp/languages.json', 'r+')
         self.languages = json.load(f)
         f.close()
 

@@ -1,8 +1,8 @@
-from steamPyp import SteamPyp
+from steam_pyp import Steam
 
 
 class User:
-    def __init__(self, steam_id, steam: SteamPyp):
+    def __init__(self, steam_id, steam: Steam):
         self.steam = steam
         self.steam_id = steam_id
         self.set_user_data(steam_id, "730")

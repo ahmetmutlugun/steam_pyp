@@ -1,7 +1,7 @@
 import time
 
-from steamPyp import SteamPyp
-from steamPyp.user import User
+from steam_pyp import Steam
+from steam_pyp.user import User
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     steam_key_file.close()
 
     # Initialize SteamAPI
-    steam = SteamPyp(key=steam_key, return_format="json")
+    steam = Steam(key=steam_key, return_format="json")
 
     # Print CS:GO server status
     print(steam.game_servers_status().json())

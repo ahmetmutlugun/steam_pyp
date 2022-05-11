@@ -1,3 +1,4 @@
-from .main import Steam
+from .steam import Steam
+from .user import User
 
-"""Import Steam from main"""
+"""Import Steam from steam"""

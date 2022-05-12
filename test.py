@@ -1,9 +1,12 @@
+import sys
 import time
+import tracemalloc
 
-from steam_pyp import Steam
+from steam_pyp.steam import Steam
 from steam_pyp.user import User
 
 if __name__ == "__main__":
+
     start_time = time.time()
 
     # Get the steam key
@@ -13,6 +16,7 @@ if __name__ == "__main__":
 
     # Initialize SteamAPI
     steam = Steam(key=steam_key, return_format="json")
+    steam_id = '76561198342056792'
 
     # Print CS:GO server status
     print(steam.game_servers_status().json())
@@ -21,27 +25,39 @@ if __name__ == "__main__":
     news = steam.news_from_app(appid=730, count=1, raw=True).json()
     print(news)
 
-    # Print player summary of 76561198342056792
-    summary = steam.player_summary(steam_ids=['76561198342056792'])
+    # Print player summary of a user
+    summary = steam.player_summary(steam_ids=[steam_id])
     print(summary)
 
-    # Print friends of 76561198342056792
-    friends = steam.player_friends(steam_id=['76561198342056792'], relationship="all")
+    # Print friends of a user
+    friends = steam.player_friends(steam_id=[steam_id], relationship="all")
     print(friends)
 
-    achievements = steam.player_achievements(steam_id="76561198342056792", appid="730")
+    # Get achievements for a game
+    achievements = steam.player_achievements(steam_id=steam_id, appid="730")
     print(achievements)
 
-    stats = steam.player_stats(steam_id="76561198342056792", appid="730")
+    # Get status from a user
+    stats = steam.player_stats(steam_id=steam_id, appid="730")
     print(stats)
 
-    games = steam.player_games(steam_id="76561198342056792")
+    # Get games from a user
+    games = steam.player_games(steam_id=steam_id)
     print(games)
 
-    recents = steam.player_recent_games(steam_id="76561198342056792")
+    # Get recent games of a user
+    recents = steam.player_recent_games(steam_id=steam_id)
     print(recents)
 
-    user = User("76561198342056792", steam)
-    print(user.set_user_data("76561198342056792", 730))
+    # Initialize a user
+
+    tracemalloc.start()
+
+    user = User(steam_id, steam, detailed=True)
+
+    print(f"User takes up approximately {tracemalloc.get_traced_memory()[1]/1000000} MB of memory ")
+    tracemalloc.stop()
+
+    print(user)
     # Print time spent
     print(f"Time spent: {time.time() - start_time}")

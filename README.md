@@ -30,24 +30,24 @@ The Steam class can be used standalone as a low-level api wrapper.
 ### Initialization
 
 ```python
-from steam_pyp import Steam
+from steam_pyp.steam import Steam
 
 steam = Steam(key="STEAM API KEY", return_format="json")
 ```
 
 ### Functions
 
-- set_key
-- set_format
-- game_servers_status
-- news_from_app
-- player_ban
-- player_summary
-- player_friends
-- player_achievements
-- player_stats
-- player_games
-- player_recent_games
+-  set_key
+-  set_format
+-  game_servers_status
+-  news_from_app
+-  player_ban
+-  player_summary
+-  player_friends
+-  player_achievements
+-  player_stats
+-  player_games
+-  player_recent_games
 
 ---
 
@@ -56,20 +56,20 @@ steam = Steam(key="STEAM API KEY", return_format="json")
 User is a class to initialize, store and update user data. It is used to gather and store user data without bothering
 with the Steam API.
 
-### Initialization
+### Usage
 
 ```python
-from steam_pyp import User
-from steam_pyp import Steam
+from steam_pyp.user import User
+from steam_pyp.steam import Steam
 
 steam = Steam(key="STEAM API KEY", return_format="json")
 
 user = User(steam_id="76561198342056792", steam=steam)
 ```
 
-### Functions
+### Methods
 
-- set_user_data
-- _set_user_summary
-- _set_bans
-- _set_csgo_stats
+-  set_user_data
+-  _set_user_summary
+-  _set_bans
+-  _set_csgo_stats

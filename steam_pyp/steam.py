@@ -24,6 +24,7 @@ class Steam:
         self.key = key
         self.url = "https://api.steampowered.com"
         self.header = {'Accept': 'application/json'}
+        self.api_calls = 0
 
         f = open(os.getcwd() + '/steam_pyp/languages.json', 'r+')
         self.languages = json.load(f)
@@ -43,10 +44,10 @@ class Steam:
         :param game_mode: competitive or casual game mode
         :return: API Response
         """
-        r = requests.get(url=f"{self.url}/ICSGOServers_730/GetGameServersStatus/v1/",
-                         headers=self.header, params={"key": self.key, "interval": interval,
-                                                      "gamemode": game_mode})
-        return r
+
+        data = self.api_call(f"{self.url}/ICSGOServers_730/GetGameServersStatus/v1/",
+                             {"key": self.key, "interval": interval, "gamemode": game_mode})
+        return data
 
     def news_from_app(
             self, appid: int, max_length: int = 0,
@@ -72,6 +73,7 @@ class Steam:
         :param raw: If True, return the response without parsing/trimming it
         :return: returns news from the given appid
         """
+        self.api_calls += 1
         r = requests.get(
             f'{self.url}/ISteamNews/GetNewsForApp/v0002/',
             headers=self.header,
@@ -100,53 +102,47 @@ class Steam:
             :param steam_id: steam id from a steam profile
             :return: ban data in json format
             """
-        r = requests.get(
-            f'{self.url}/ISteamUser/GetPlayerBans/v1',
-            params={"key": self.key, "steamids": f"{steam_id}"},
-            headers=self.header)
-        data = r.json()
+        data = self.api_call(f'{self.url}/ISteamUser/GetPlayerBans/v1', {"key": self.key, "steamids": f"{steam_id}"})
         if len(data['players']) < 1:
             return None
         return data["players"][0]
 
     def player_summary(self, steam_ids):
-        r = requests.get(f"{self.url}/ISteamUser/GetPlayerSummaries/v0002",
-                         params={'key': self.key, "steamids": steam_ids})
-        data = r.json()
+        data = self.api_call(f"{self.url}/ISteamUser/GetPlayerSummaries/v0002",
+                             {'key': self.key, "steamids": steam_ids})
         return data
 
     def player_friends(self, steam_id, relationship="friend"):
-        r = requests.get(f"{self.url}/ISteamUser/GetFriendList/v0001",
-                         params={'key': self.key, "steamid": steam_id, "relationship": relationship})
-        data = r.json()
+        data = self.api_call(f"{self.url}/ISteamUser/GetFriendList/v0001",
+                             {'key': self.key, "steamid": steam_id, "relationship": relationship})
         return data
 
     def player_achievements(self, steam_id, appid, language=None):
-        r = requests.get(f"{self.url}/ISteamUserStats/GetPlayerAchievements/v0001",
-                         params={'key': self.key, "steamid": steam_id, "appid": appid, "l": language})
-        data = r.json()
+        data = self.api_call(f"{self.url}/ISteamUserStats/GetPlayerAchievements/v0001",
+                             {'key': self.key, "steamid": steam_id, "appid": appid, "l": language})
         return data
 
     def player_stats(self, steam_id, appid, language=None):
-        r = requests.get(f"{self.url}/ISteamUserStats/GetUserStatsForGame/v0002",
-                         params={'key': self.key, "steamid": steam_id, "appid": appid, "l": language})
-        data = r.json()
+        data = self.api_call(f"{self.url}/ISteamUserStats/GetUserStatsForGame/v0002",
+                             {'key': self.key, "steamid": steam_id, "appid": appid, "l": language})
         return data
 
     def player_games(self, steam_id, include_app_info=True, include_played_free_games=True,
                      return_format="json", appids_filter=None):
-        r = requests.get(f"{self.url}/IPlayerService/GetOwnedGames/v0001",
-                         params={'key': self.key,
-                                 "steamid": steam_id,
-                                 "include_played_free_games": include_played_free_games,
-                                 "include_appinfo": include_app_info,
-                                 "format": return_format, "appids_filter": appids_filter})
-        data = r.json()
+        data = self.api_call(f"{self.url}/IPlayerService/GetOwnedGames/v0001", {'key': self.key,
+                                                                                "steamid": steam_id,
+                                                                                "include_played_free_games": include_played_free_games,
+                                                                                "include_appinfo": include_app_info,
+                                                                                "format": return_format,
+                                                                                "appids_filter": appids_filter})
         return data
 
-    def player_recent_games(self, steam_id, count=None, return_format="json"):
-        r = requests.get(f"{self.url}/IPlayerService/GetRecentlyPlayedGames/v0001",
-                         params={'key': self.key, "steamid": steam_id, "count": count, "format": return_format})
-        data = r.json()
+    def player_recent_games(self, steam_id, count=None):
+        data = self.api_call(f"{self.url}/IPlayerService/GetRecentlyPlayedGames/v0001",
+                             {'key': self.key, "steamid": steam_id, "count": count})
         return data
 
+    def api_call(self, url, params):
+        self.api_calls += 1
+        r = requests.get(url, params=params)
+        return r.json()

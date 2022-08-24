@@ -59,8 +59,8 @@ class User:
             games.append(i['appid'])
         self.games_list = games
 
-    def _set_recent_games(self, count=None, return_format="json"):
-        self.recent_games = self._steam.player_recent_games(self.steam_id, count, return_format)
+    def _set_recent_games(self, count=None):
+        self.recent_games = self._steam.player_recent_games(self.steam_id, count)
 
     def _set_friends(self):
         self.friends = self._steam.player_friends(self.steam_id)

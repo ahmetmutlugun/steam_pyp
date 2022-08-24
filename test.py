@@ -19,7 +19,7 @@ if __name__ == "__main__":
     steam_id = '76561198342056792'
 
     # Print CS:GO server status
-    print(steam.game_servers_status().json())
+    print(steam.game_servers_status())
 
     # Print the most recent CS:GO news
     news = steam.news_from_app(appid=730, count=1, raw=True).json()
@@ -53,11 +53,10 @@ if __name__ == "__main__":
 
     tracemalloc.start()
 
-    user = User(steam_id, steam, detailed=True)
-
-    print(f"User takes up approximately {tracemalloc.get_traced_memory()[1]/1000000} MB of memory ")
+    user = User(steam_id, steam, detailed=False)
+    print("Steam API calls: ", steam.api_calls)
+    print(f"User takes up approximately {tracemalloc.get_traced_memory()[1]/1000000} MB of memory.")
     tracemalloc.stop()
 
-    print(user)
     # Print time spent
     print(f"Time spent: {time.time() - start_time}")

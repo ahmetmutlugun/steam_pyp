@@ -57,6 +57,7 @@ if __name__ == "__main__":
     print("Steam API calls: ", steam.api_calls)
     print(f"User takes up approximately {tracemalloc.get_traced_memory()[1]/1000000} MB of memory.")
     tracemalloc.stop()
+    print(user)
 
     # Print time spent
     print(f"Time spent: {time.time() - start_time}")

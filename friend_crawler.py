@@ -29,7 +29,7 @@ if __name__ == "__main__":
             except KeyError:
                 friends_dict.update({i['steamid']: None})
 
-    for _ in range(0, 3):
+    for _ in range(0, 1):
         new_dict = {}
         for i in friends_dict.keys():
             if friends_dict[i] is not None:

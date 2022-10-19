@@ -2,7 +2,7 @@ from steam_pyp.steam import Steam
 
 
 class User:
-    def __init__(self, steam_id, steam: Steam, detailed = False):
+    def __init__(self, steam_id, steam: Steam, detailed=False):
 
         self.achievements = []
         self.game_stats = []

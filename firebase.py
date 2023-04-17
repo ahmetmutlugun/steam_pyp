@@ -1,9 +1,7 @@
 import json
 import os
-import time
 import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
+from firebase_admin import db, exceptions, credentials
 
 # Fetch the service account key JSON file contents
 if __name__ == "__main__":
@@ -33,4 +31,9 @@ def set_item(items):
             i[1].pop("success")
         update_dict.update({name: i[1]})
     ref = db.reference("Items")
-    ref.update(update_dict)
+    try:
+        ref.update(update_dict)
+    except firebase_admin.exceptions.InvalidArgumentError as e:
+        print(e)
+        print(update_dict)
+

@@ -7,6 +7,9 @@ import logging
 from aiohttp import ContentTypeError
 
 logging.basicConfig(level=logging.DEBUG)
+logging.getLogger('asyncio').setLevel(logging.WARNING)
+logging.getLogger('urllib3').setLevel(logging.WARNING)
+
 f = open('config.json')
 config = json.load(f)
 f.close()
@@ -62,6 +65,7 @@ if __name__ == "__main__":
         for i in range(0, 10):
             item = item_queue.pop(0)
             item_queue.append(item)
+            print(item)
         count += 10
         if count > length:
             item_queue = list(requests.get("https://api.steamapis.com/image/items/730").json().keys())

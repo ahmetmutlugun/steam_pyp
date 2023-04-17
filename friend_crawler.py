@@ -2,20 +2,16 @@ import time
 import tracemalloc
 
 from steam_pyp.steam import Steam
+from steam_pyp.utilities import read_steam_key
 
 if __name__ == "__main__":
+    # Start utilities
     tracemalloc.start()
-
     start_time = time.time()
 
-    # Get the steam key
-    steam_key_file = open("steam.key", "r")
-    steam_key = steam_key_file.read().replace("\n", "")
-    steam_key_file.close()
-
-    # Initialize SteamAPI
-    steam = Steam(key=steam_key, return_format="json")
-    steam_id = '76561199223184522'
+    # Initialize SteamAPI with our steam api key
+    steam = Steam(key=read_steam_key("steam.key"), return_format="json")
+    steam_id = '76561199223184522'  # Must have a public friend list
 
     friends = steam.player_friends(steam_id=[steam_id], relationship="all")['friendslist']['friends']
     friends_dict = {}

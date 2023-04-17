@@ -15,7 +15,8 @@ class User:
 
     def _set_user_data(self, steam_id, appid, language=None, include_app_info=True,
                        include_played_free_games=True, return_format="json", appids_filter=None, count=None,
-                       raw_data=False):
+
+                      raw_data=False):
         if return_format not in ["json", "xml", "vdf"]:
             raise ValueError("return_format must be: json, xml, or vdf")
         if not raw_data:

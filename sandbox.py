@@ -1,10 +1,14 @@
 import asyncio
 import aiohttp
+import redis
 import requests
 import json
 import firebase
+import aiohttp.client_exceptions
 import logging
 from aiohttp import ContentTypeError
+
+from steam_pyp.utilities import redis_connect, redis_set_item
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger('asyncio').setLevel(logging.WARNING)
@@ -20,6 +24,8 @@ password = config['password']
 proxy_auth = aiohttp.BasicAuth(username, password)
 results = []
 
+redis_client = redis_connect()
+
 
 async def get_price(session, url, name):
     proxy = proxies.pop(0)
@@ -27,18 +33,18 @@ async def get_price(session, url, name):
 
     try:
         async with session.get(url, proxy=proxy, proxy_auth=proxy_auth) as resp:
-            data = {"failed": True}
-
             try:
                 data = await resp.json()
-                if data is None:
-                    data = {"failed": True}
             except ContentTypeError:
                 print(await resp.text())
-
+            # print(name, data)
             return name, data
-    except TimeoutError:
-        return name, {"failed": True}
+    except TimeoutError or aiohttp.client_exceptions.ClientConnectorError:
+        print("Timeout Error", proxy)
+        return name, None
+    except aiohttp.client_exceptions.ClientConnectorError:
+        print("Client connection error", proxy)
+        return name, None
 
 
 async def start(items):
@@ -49,8 +55,9 @@ async def start(items):
             tasks.append(asyncio.ensure_future(get_price(session, url, j)))
 
         original_item = await asyncio.gather(*tasks)
-        firebase.set_item(original_item)
-        await asyncio.sleep(5)
+        redis_set_item(original_item, redis_client)
+
+        await asyncio.sleep(20)
 
 
 if __name__ == "__main__":
@@ -65,7 +72,6 @@ if __name__ == "__main__":
         for i in range(0, 10):
             item = item_queue.pop(0)
             item_queue.append(item)
-            print(item)
         count += 10
         if count > length:
             item_queue = list(requests.get("https://api.steamapis.com/image/items/730").json().keys())
